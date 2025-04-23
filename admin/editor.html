@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Editor - Cyberpunk Personal Hub</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/cyberpunk-effects.css">
+    <link rel="stylesheet" href="../static/css/hacker-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .editor-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .editor-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .editor-form {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .form-group label {
+            color: var(--neon-green);
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        
+        .form-control {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            resize: vertical;
+        }
+        
+        .form-control:focus {
+            outline: none;
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+        
+        .editor-textarea {
+            min-height: 300px;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .editor-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .tag {
+            background-color: rgba(0, 255, 65, 0.2);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 5px 10px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .tag .remove-tag {
+            cursor: pointer;
+            font-size: 12px;
+        }
+        
+        .add-tag-input {
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px dashed var(--neon-green);
+            color: var(--neon-green);
+            padding: 5px 10px;
+            font-family: 'Courier New', monospace;
+            width: 150px;
+        }
+        
+        .editor-toolbar {
+            display: flex;
+            gap: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--neon-green);
+            padding: 10px;
+        }
+        
+        .toolbar-button {
+            background-color: transparent;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 5px 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .toolbar-button:hover {
+            background-color: rgba(0, 255, 65, 0.2);
+        }
+        
+        .preview-container {
+            border: 1px solid var(--neon-green);
+            padding: 20px;
+            margin-top: 20px;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+        
+        .preview-toggle {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 10px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid var(--neon-green);
+            transition: .4s;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 3px;
+            background-color: var(--neon-green);
+            transition: .4s;
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+        
+        .toggle-label {
+            margin-right: 10px;
+            color: var(--neon-green);
+        }
+    </style>
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="overlay"></div>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="terminal-button"></span>
+                <span class="terminal-button"></span>
+                <span class="terminal-button"></span>
+            </div>
+            <div class="terminal-title">CONTENT_EDITOR_v3.2</div>
+        </div>
+        <div class="terminal-content">
+            <header class="glitch-header">
+                <h1 class="glitch" data-text="CYBERPUNK_HUB">CYBERPUNK_HUB</h1>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="../index.html" class="nav-link">> HOME</a></li>
+                        <li><a href="../admin/index.html" class="nav-link">> ADMIN</a></li>
+                    </ul>
+                </nav>
+            </header>
+            
+            <main>
+                <section class="content-editor">
+                    <div class="editor-header">
+                        <h2 class="section-title cyber-glitch" data-text="CONTENT_EDITOR">CONTENT_EDITOR</h2>
+                        <div class="editor-type-selector">
+                            <button class="cyber-button active" data-type="blog">BLOG POST</button>
+                            <button class="cyber-button" data-type="ctf">CTF WRITEUP</button>
+                            <button class="cyber-button" data-type="page">PAGE</button>
+                        </div>
+                    </div>
+                    
+                    <div class="editor-container">
+                        <div class="editor-form">
+                            <div class="form-group">
+                                <label for="content-title">TITLE:</label>
+                                <input type="text" id="content-title" class="form-control" placeholder="Enter title...">
+                            </div>
+                            
+                            <div class="form-group blog-field ctf-field">
+                                <label for="content-excerpt">EXCERPT:</label>
+                                <textarea id="content-excerpt" class="form-control" rows="3" placeholder="Enter short excerpt..."></textarea>
+                            </div>
+                            
+                            <div class="form-group blog-field">
+                                <label>TAGS:</label>
+                                <div class="tag-container">
+                                    <div class="tag">
+                                        Cybersecurity <span class="remove-tag">&times;</span>
+                                    </div>
+                                    <div class="tag">
+                                        Hacking <span class="remove-tag">&times;</span>
+                                    </div>
+                                    <div class="tag">
+                                        Tutorial <span class="remove-tag">&times;</span>
+                                    </div>
+                                    <input type="text" class="add-tag-input" placeholder="Add tag...">
+                                </div>
+                            </div>
+                            
+                            <div class="form-group ctf-field" style="display: none;">
+                                <label for="ctf-event">CTF EVENT:</label>
+                                <input type="text" id="ctf-event" class="form-control" placeholder="Enter CTF event name...">
+                            </div>
+                            
+                            <div class="form-group ctf-field" style="display: none;">
+                                <label for="ctf-category">CATEGORY:</label>
+                                <select id="ctf-category" class="form-control">
+                                    <option value="">Select category...</option>
+                                    <option value="Web Exploitation">Web Exploitation</option>
+                                    <option value="Reverse Engineering">Reverse Engineering</option>
+                                    <option value="Binary Exploitation">Binary Exploitation</option>
+                                    <option value="Cryptography">Cryptography</option>
+                                    <option value="Forensics">Forensics</option>
+                                    <option value="OSINT">OSINT</option>
+                                    <option value="Misc">Misc</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group ctf-field" style="display: none;">
+                                <label for="ctf-points">POINTS:</label>
+                                <input type="number" id="ctf-points" class="form-control" placeholder="Enter points value...">
+                            </div>
+                            
+                            <div class="editor-toolbar">
+                                <button class="toolbar-button" data-action="heading"><i class="fas fa-heading"></i></button>
+                                <button class="toolbar-button" data-action="bold"><i class="fas fa-bold"></i></button>
+                                <button class="toolbar-button" data-action="italic"><i class="fas fa-italic"></i></button>
+                                <button class="toolbar-button" data-action="code"><i class="fas fa-code"></i></button>
+                                <button class="toolbar-button" data-action="link"><i class="fas fa-link"></i></button>
+                                <button class="toolbar-button" data-action="image"><i class="fas fa-image"></i></button>
+                                <button class="toolbar-button" data-action="list-ul"><i class="fas fa-list-ul"></i></button>
+                                <button class="toolbar-button" data-action="list-ol"><i class="fas fa-list-ol"></i></button>
+                                <button class="toolbar-button" data-action="terminal"><i class="fas fa-terminal"></i></button>
+                                <button class="toolbar-button" data-action="alert"><i class="fas fa-exclamation-triangle"></i></button>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="content-body">CONTENT:</label>
+                                <textarea id="content-body" class="form-control editor-textarea" placeholder="Enter content here..."></textarea>
+                            </div>
+                            
+                            <div class="preview-toggle">
+                                <span class="toggle-label">PREVIEW:</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="preview-toggle">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="preview-container" id="preview-container" style="display: none;">
+                                <div id="preview-content"></div>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="content-status">STATUS:</label>
+                                <select id="content-status" class="form-control">
+                                    <option value="draft">DRAFT</option>
+                                    <option value="published">PUBLISHED</option>
+                                    <option value="scheduled">SCHEDULED</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group" id="schedule-group" style="display: none;">
+                                <label for="publish-date">PUBLISH DATE:</label>
+                                <input type="datetime-local" id="publish-date" class="form-control">
+                            </div>
+                            
+                            <div class="editor-actions">
+                                <button class="cyber-button" id="save-draft">SAVE DRAFT</button>
+                                <button class="cyber-button" id="preview-button">PREVIEW</button>
+                                <button class="cyber-button primary" id="publish-button">PUBLISH</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            
+            <footer>
+                <div class="footer-content">
+                    <div class="footer-info">
+                        <p>© 2023 CYBERPUNK_HUB | All rights reserved</p>
+                        <p>Secured with quantum encryption</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <script src="../static/js/main.js"></script>
+    <script src="../static/js/cyberpunk-effects.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Content type selector
+            const typeButtons = document.querySelectorAll('.editor-type-selector .cyber-button');
+            const blogFields = document.querySelectorAll('.blog-field');
+            const ctfFields = document.querySelectorAll('.ctf-field');
+            
+            typeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    typeButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const contentType = this.getAttribute('data-type');
+                    
+                    // Show/hide fields based on content type
+                    if (contentType === 'blog') {
+                        blogFields.forEach(field => field.style.display = 'block');
+                        ctfFields.forEach(field => field.style.display = 'none');
+                    } else if (contentType === 'ctf') {
+                        blogFields.forEach(field => field.style.display = 'block');
+                        ctfFields.forEach(field => field.style.display = 'block');
+                    } else {
+                        blogFields.forEach(field => field.style.display = 'none');
+                        ctfFields.forEach(field => field.style.display = 'none');
+                    }
+                });
+            });
+            
+            // Tag functionality
+            const tagContainer = document.querySelector('.tag-container');
+            const addTagInput = document.querySelector('.add-tag-input');
+            
+            addTagInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter' && this.value.trim() !== '') {
+                    const tag = document.createElement('div');
+                    tag.className = 'tag';
+                    tag.innerHTML = `${this.value.trim()} <span class="remove-tag">&times;</span>`;
+                    
+                    // Insert before the input
+                    tagContainer.insertBefore(tag, addTagInput);
+                    
+                    // Clear input
+                    this.value = '';
+                    
+                    // Add event listener to remove tag
+                    tag.querySelector('.remove-tag').addEventListener('click', function() {
+                        tag.remove();
+                    });
+                }
+            });
+            
+            // Add event listeners to existing remove tag buttons
+            document.querySelectorAll('.remove-tag').forEach(button => {
+                button.addEventListener('click', function() {
+                    this.parentElement.remove();
+                });
+            });
+            
+            // Status change handler
+            const statusSelect = document.getElementById('content-status');
+            const scheduleGroup = document.getElementById('schedule-group');
+            
+            statusSelect.addEventListener('change', function() {
+                if (this.value === 'scheduled') {
+                    scheduleGroup.style.display = 'block';
+                } else {
+                    scheduleGroup.style.display = 'none';
+                }
+            });
+            
+            // Editor toolbar functionality
+            const toolbarButtons = document.querySelectorAll('.toolbar-button');
+            const contentBody = document.getElementById('content-body');
+            
+            toolbarButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const action = this.getAttribute('data-action');
+                    const textarea = contentBody;
+                    const start = textarea.selectionStart;
+                    const end = textarea.selectionEnd;
+                    const selectedText = textarea.value.substring(start, end);
+                    
+                    let insertText = '';
+                    
+                    switch(action) {
+                        case 'heading':
+                            insertText = `\n### > ${selectedText}\n`;
+                            break;
+                        case 'bold':
+                            insertText = `**${selectedText}**`;
+                            break;
+                        case 'italic':
+                            insertText = `*${selectedText}*`;
+                            break;
+                        case 'code':
+                            insertText = `\`${selectedText}\``;
+                            break;
+                        case 'link':
+                            insertText = `[${selectedText}](url)`;
+                            break;
+                        case 'image':
+                            insertText = `![${selectedText}](image_url)`;
+                            break;
+                        case 'list-ul':
+                            insertText = `\n- ${selectedText}\n- Item 2\n- Item 3\n`;
+                            break;
+                        case 'list-ol':
+                            insertText = `\n1. ${selectedText}\n2. Item 2\n3. Item 3\n`;
+                            break;
+                        case 'terminal':
+                            insertText = `\n\`\`\`\n${selectedText}\n\`\`\`\n`;
+                            break;
+                        case 'alert':
+                            insertText = `\n<div class="cyber-alert info">\n${selectedText}\n</div>\n`;
+                            break;
+                    }
+                    
+                    // Insert the text
+                    textarea.value = textarea.value.substring(0, start) + insertText + textarea.value.substring(end);
+                    
+                    // Set cursor position
+                    textarea.focus();
+                    textarea.selectionStart = start + insertText.length;
+                    textarea.selectionEnd = start + insertText.length;
+                });
+            });
+            
+            // Preview toggle
+            const previewToggle = document.getElementById('preview-toggle');
+            const previewContainer = document.getElementById('preview-container');
+            const previewContent = document.getElementById('preview-content');
+            
+            previewToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    // Show preview
+                    previewContainer.style.display = 'block';
+                    
+                    // Convert markdown-like syntax to HTML (simplified for demo)
+                    let content = contentBody.value;
+                    
+                    // Convert headings
+                    content = content.replace(/### > (.*?)$/gm, '<h3>&gt; $1</h3>');
+                    
+                    // Convert bold
+                    content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                    
+                    // Convert italic
+                    content = content.replace(/\*(.*?)\*/g, '<em>$1</em>');
+                    
+                    // Convert code
+                    content = content.replace(/`(.*?)`/g, '<code>$1</code>');
+                    
+                    // Convert links
+                    content = content.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+                    
+                    // Convert images
+                    content = content.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1">');
+                    
+                    // Convert unordered lists
+                    content = content.replace(/- (.*?)$/gm, '<li>$1</li>');
+                    content = content.replace(/(<li>.*?<\/li>\n)+/g, '<ul>$&</ul>');
+                    
+                    // Convert ordered lists
+                    content = content.replace(/\d+\. (.*?)$/gm, '<li>$1</li>');
+                    content = content.replace(/(<li>.*?<\/li>\n)+/g, '<ol>$&</ol>');
+                    
+                    // Convert code blocks
+                    content = content.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+                    
+                    // Convert paragraphs
+                    content = content.replace(/^(?!<[a-z])(.*?)$/gm, '<p>$1</p>');
+                    
+                    // Set preview content
+                    previewContent.innerHTML = content;
+                } else {
+                    // Hide preview
+                    previewContainer.style.display = 'none';
+                }
+            });
+            
+            // Save, Preview, and Publish buttons
+            const saveButton = document.getElementById('save-draft');
+            const previewButton = document.getElementById('preview-button');
+            const publishButton = document.getElementById('publish-button');
+            
+            saveButton.addEventListener('click', function() {
+                // In a real application, this would save to a database
+                alert('Content saved as draft!');
+            });
+            
+            previewButton.addEventListener('click', function() {
+                // Toggle preview
+                previewToggle.checked = !previewToggle.checked;
+                
+                // Trigger change event
+                const event = new Event('change');
+                previewToggle.dispatchEvent(event);
+            });
+            
+            publishButton.addEventListener('click', function() {
+                // In a real application, this would publish the content
+                alert('Content published successfully!');
+            });
+        });
+    </script>
+</body>
+</html>

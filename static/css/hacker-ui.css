@@ -1,0 +1,619 @@
+/* Cyberpunk Color Scheme */
+:root {
+    --primary-color: #0ff;          /* Cyan - primary neon color */
+    --secondary-color: #f0f;        /* Magenta - secondary neon color */
+    --tertiary-color: #ff0;         /* Yellow - accent color */
+    --danger-color: #f00;           /* Red - warning/danger color */
+    --success-color: #0f0;          /* Green - success/matrix color */
+    
+    --background-color: #000;       /* Black background */
+    --terminal-color: #0c0c0c;      /* Slightly lighter black for terminal */
+    --card-bg-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black for cards */
+    
+    --text-color: #fff;             /* White text */
+    --text-color-muted: #888;       /* Muted text */
+    
+    --glitch-color-1: #0ff;         /* Glitch effect color 1 */
+    --glitch-color-2: #f0f;         /* Glitch effect color 2 */
+    
+    --header-height: 60px;          /* Standard header height */
+    --terminal-header-height: 30px; /* Terminal header height */
+    
+    --border-radius: 0px;           /* Sharp edges for cyberpunk feel */
+    --card-border-radius: 0px;      /* Sharp edges for cards */
+    
+    --shadow-color: rgba(0, 255, 255, 0.5); /* Cyan shadow */
+    --shadow-color-alt: rgba(255, 0, 255, 0.5); /* Magenta shadow */
+}
+
+/* Cyberpunk Typography */
+@font-face {
+    font-family: 'Cyberpunk';
+    src: url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700;900&display=swap');
+}
+
+body {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 16px;
+    line-height: 1.6;
+    letter-spacing: 0.5px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Orbitron', sans-serif;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cyber-text {
+    font-family: 'Share Tech Mono', monospace;
+    color: var(--primary-color);
+}
+
+.cyber-heading {
+    font-family: 'Orbitron', sans-serif;
+    color: var(--primary-color);
+    text-shadow: 0 0 5px var(--primary-color);
+    text-transform: uppercase;
+}
+
+.code-text {
+    font-family: 'Share Tech Mono', monospace;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 2px 5px;
+    border-left: 2px solid var(--primary-color);
+}
+
+/* Cyberpunk UI Elements */
+.cyber-panel {
+    background-color: var(--card-bg-color);
+    border: 1px solid var(--primary-color);
+    box-shadow: 0 0 10px var(--shadow-color);
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.cyber-panel:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, 
+        var(--primary-color) 0%,
+        var(--secondary-color) 50%,
+        var(--primary-color) 100%
+    );
+    background-size: 200% 100%;
+    animation: gradient-shift 5s linear infinite;
+}
+
+@keyframes gradient-shift {
+    0% {
+        background-position: 0% 50%;
+    }
+    100% {
+        background-position: 200% 50%;
+    }
+}
+
+.cyber-window {
+    background-color: var(--terminal-color);
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    position: relative;
+}
+
+.cyber-window-header {
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 8px 15px;
+    border-bottom: 1px solid var(--primary-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cyber-window-title {
+    color: var(--primary-color);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.cyber-window-controls {
+    display: flex;
+    gap: 5px;
+}
+
+.cyber-window-button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+}
+
+.cyber-window-content {
+    padding: 15px;
+}
+
+/* Hacker Terminal Elements */
+.terminal-line {
+    font-family: 'Share Tech Mono', monospace;
+    margin-bottom: 5px;
+    display: flex;
+}
+
+.terminal-prompt {
+    color: var(--primary-color);
+    margin-right: 10px;
+}
+
+.terminal-output {
+    color: var(--text-color);
+    white-space: pre-wrap;
+}
+
+.terminal-error {
+    color: var(--danger-color);
+}
+
+.terminal-success {
+    color: var(--success-color);
+}
+
+.terminal-warning {
+    color: var(--tertiary-color);
+}
+
+.terminal-input-line {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.terminal-input {
+    flex-grow: 1;
+    background: transparent;
+    border: none;
+    color: var(--text-color);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    outline: none;
+    caret-color: var(--primary-color);
+}
+
+/* Hacker-style Code Display */
+.code-display {
+    background-color: rgba(0, 0, 0, 0.8);
+    border-left: 3px solid var(--primary-color);
+    padding: 15px;
+    margin: 15px 0;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.9rem;
+    overflow-x: auto;
+    position: relative;
+}
+
+.code-display:before {
+    content: attr(data-language);
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--primary-color);
+    color: #000;
+    padding: 2px 8px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+}
+
+.code-line {
+    display: flex;
+}
+
+.code-line-number {
+    color: var(--text-color-muted);
+    margin-right: 15px;
+    user-select: none;
+}
+
+.code-line-content {
+    color: var(--text-color);
+}
+
+.code-keyword {
+    color: var(--secondary-color);
+}
+
+.code-string {
+    color: var(--tertiary-color);
+}
+
+.code-comment {
+    color: var(--text-color-muted);
+}
+
+.code-function {
+    color: var(--primary-color);
+}
+
+/* Binary/Hex Data Display */
+.hex-display {
+    font-family: 'Share Tech Mono', monospace;
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 15px;
+    display: grid;
+    grid-template-columns: 80px 1fr 1fr;
+    gap: 15px;
+    overflow-x: auto;
+}
+
+.hex-offset {
+    color: var(--secondary-color);
+}
+
+.hex-values {
+    color: var(--primary-color);
+}
+
+.hex-ascii {
+    color: var(--text-color);
+}
+
+/* Data Visualization Elements */
+.data-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(30px, 1fr));
+    gap: 5px;
+}
+
+.data-cell {
+    aspect-ratio: 1;
+    background-color: rgba(0, 255, 255, 0.1);
+    border: 1px solid var(--primary-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.data-cell:hover {
+    background-color: rgba(0, 255, 255, 0.3);
+    transform: scale(1.1);
+}
+
+/* Network Graph */
+.network-graph {
+    position: relative;
+    height: 300px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--primary-color);
+    overflow: hidden;
+}
+
+.network-node {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+    transform: translate(-50%, -50%);
+}
+
+.network-line {
+    position: absolute;
+    height: 1px;
+    background-color: var(--primary-color);
+    transform-origin: 0 0;
+    opacity: 0.5;
+}
+
+/* Hacker Authentication Elements */
+.auth-panel {
+    background-color: rgba(0, 0, 0, 0.8);
+    border: 1px solid var(--primary-color);
+    padding: 20px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.auth-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.auth-title {
+    color: var(--primary-color);
+    font-family: 'Orbitron', sans-serif;
+    margin-bottom: 10px;
+}
+
+.auth-subtitle {
+    color: var(--text-color-muted);
+    font-size: 0.9rem;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.auth-input-group {
+    position: relative;
+}
+
+.auth-label {
+    position: absolute;
+    top: -10px;
+    left: 10px;
+    background-color: #000;
+    padding: 0 5px;
+    font-size: 0.8rem;
+    color: var(--primary-color);
+}
+
+.auth-input {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    border: 1px solid var(--primary-color);
+    color: var(--text-color);
+    padding: 10px 15px;
+    font-family: 'Share Tech Mono', monospace;
+    outline: none;
+}
+
+.auth-input:focus {
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+}
+
+.auth-button {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 10px;
+    font-family: 'Share Tech Mono', monospace;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.auth-button:hover {
+    background-color: rgba(0, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+}
+
+/* Fingerprint Scanner */
+.fingerprint-scanner {
+    width: 100px;
+    height: 100px;
+    border: 1px solid var(--primary-color);
+    border-radius: 5px;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.fingerprint-scanner:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+    animation: fingerprint-scan 2s linear infinite;
+}
+
+@keyframes fingerprint-scan {
+    0% {
+        top: 0;
+    }
+    100% {
+        top: 100%;
+    }
+}
+
+.fingerprint-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    color: var(--primary-color);
+    opacity: 0.5;
+}
+
+/* Retina Scanner */
+.retina-scanner {
+    width: 100px;
+    height: 100px;
+    border: 1px solid var(--primary-color);
+    border-radius: 50%;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+}
+
+.retina-scanner:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background-color: var(--primary-color);
+    box-shadow: 0 0 10px var(--primary-color);
+    animation: retina-scan 2s linear infinite;
+}
+
+@keyframes retina-scan {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.retina-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 50px;
+    color: var(--primary-color);
+    opacity: 0.5;
+}
+
+/* Hacker-style Notifications */
+.cyber-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: rgba(0, 0, 0, 0.9);
+    border: 1px solid var(--primary-color);
+    padding: 15px;
+    max-width: 300px;
+    z-index: 1000;
+    animation: notification-slide-in 0.3s ease;
+}
+
+@keyframes notification-slide-in {
+    0% {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    100% {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.notification-title {
+    color: var(--primary-color);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 1rem;
+    margin: 0;
+}
+
+.notification-close {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.notification-body {
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+/* Hacker-style Tooltips */
+.cyber-tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.cyber-tooltip:hover:after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.9);
+    color: var(--primary-color);
+    padding: 5px 10px;
+    border: 1px solid var(--primary-color);
+    font-size: 0.8rem;
+    white-space: nowrap;
+    z-index: 100;
+}
+
+.cyber-tooltip:hover:before {
+    content: "";
+    position: absolute;
+    bottom: calc(100% - 5px);
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: var(--primary-color) transparent transparent transparent;
+    z-index: 100;
+}
+
+/* Responsive Design Adjustments */
+@media (max-width: 768px) {
+    .cyber-panel {
+        padding: 15px;
+    }
+    
+    .hex-display {
+        grid-template-columns: 60px 1fr;
+    }
+    
+    .hex-ascii {
+        display: none;
+    }
+    
+    .data-grid {
+        grid-template-columns: repeat(auto-fill, minmax(25px, 1fr));
+    }
+    
+    .auth-panel {
+        max-width: 100%;
+    }
+}
+
+@media (max-width: 480px) {
+    .cyber-window-header {
+        padding: 5px 10px;
+    }
+    
+    .cyber-window-title {
+        font-size: 0.8rem;
+    }
+    
+    .cyber-window-button {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .terminal-line {
+        font-size: 0.9rem;
+    }
+    
+    .code-display {
+        font-size: 0.8rem;
+    }
+    
+    .hex-display {
+        font-size: 0.8rem;
+        grid-template-columns: 50px 1fr;
+    }
+    
+    .data-grid {
+        grid-template-columns: repeat(auto-fill, minmax(20px, 1fr));
+    }
+    
+    .data-cell {
+        font-size: 0.7rem;
+    }
+}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTF Writeup - Cyberpunk Personal Hub</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/cyberpunk-effects.css">
+    <link rel="stylesheet" href="../static/css/hacker-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="overlay"></div>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="terminal-button"></span>
+                <span class="terminal-button"></span>
+                <span class="terminal-button"></span>
+            </div>
+            <div class="terminal-title">CTF_WRITEUP_VIEWER_v1.3</div>
+        </div>
+        <div class="terminal-content">
+            <header class="glitch-header">
+                <h1 class="glitch" data-text="CYBERPUNK_HUB">CYBERPUNK_HUB</h1>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="../index.html" class="nav-link">> HOME</a></li>
+                        <li><a href="../index.html#ctf" class="nav-link">> BACK_TO_CTF</a></li>
+                    </ul>
+                </nav>
+            </header>
+            
+            <main>
+                <article class="ctf-writeup">
+                    <div class="ctf-writeup-header">
+                        <div class="ctf-info">
+                            <span class="ctf-event">CTF_EVENT_NAME</span>
+                            <span class="ctf-category">CHALLENGE_CATEGORY</span>
+                            <span class="ctf-points">XXX pts</span>
+                        </div>
+                        <h2 class="cyber-glitch" data-text="CHALLENGE_TITLE">CHALLENGE_TITLE</h2>
+                    </div>
+                    
+                    <div class="ctf-writeup-content">
+                        <!-- CTF writeup content goes here -->
+                        <h3>> Challenge Description</h3>
+                        <div class="data-block">
+                            <p>Original challenge description goes here. This typically includes the scenario, hints, and any files or links provided by the CTF organizers.</p>
+                        </div>
+                        
+                        <h3>> Initial Analysis</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.</p>
+                        
+                        <div class="terminal-window cyber-window">
+                            <div class="cyber-window-header">
+                                <div class="cyber-window-title">terminal@kali:~</div>
+                                <div class="cyber-window-controls">
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                </div>
+                            </div>
+                            <div class="cyber-window-content">
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt">$</span>
+                                    <span class="terminal-output">file challenge.bin</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">challenge.bin: ELF 64-bit LSB executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=0123456789abcdef, not stripped</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>> Exploitation Process</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.</p>
+                        
+                        <div class="code-display" data-language="python">
+                            <div class="code-line">
+                                <span class="code-line-number">1</span>
+                                <span class="code-line-content"><span class="code-keyword">from</span> pwn <span class="code-keyword">import</span> *</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">2</span>
+                                <span class="code-line-content"></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">3</span>
+                                <span class="code-line-content">r = remote(<span class="code-string">'challenge.ctf.com'</span>, <span class="code-string">1337</span>)</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">4</span>
+                                <span class="code-line-content">payload = b<span class="code-string">'A'</span> * <span class="code-string">64</span> + p64(<span class="code-string">0x4006a9</span>)</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">5</span>
+                                <span class="code-line-content">r.sendline(payload)</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">6</span>
+                                <span class="code-line-content">r.interactive()</span>
+                            </div>
+                        </div>
+                        
+                        <div class="hex-display">
+                            <div class="hex-offset">00000000</div>
+                            <div class="hex-values">41 41 41 41 41 41 41 41 41 41 41 41 41 41 41 41</div>
+                            <div class="hex-ascii">AAAAAAAAAAAAAAAA</div>
+                        </div>
+                        
+                        <h3>> Key Insights</h3>
+                        <div class="cyber-alert info">
+                            The vulnerability was a classic buffer overflow with no stack canary protection.
+                        </div>
+                        
+                        <h3>> Flag Capture</h3>
+                        <div class="data-block">
+                            <p class="terminal-success">FLAG{th1s_1s_4_f4k3_fl4g_f0r_d3m0_purp0s3s}</p>
+                        </div>
+                        
+                        <h3>> Lessons Learned</h3>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.</p>
+                    </div>
+                    
+                    <div class="ctf-writeup-footer">
+                        <div class="ctf-writeup-nav">
+                            <a href="#" class="cyber-button">PREVIOUS_WRITEUP</a>
+                            <a href="#" class="cyber-button">NEXT_WRITEUP</a>
+                        </div>
+                        <div class="ctf-writeup-share">
+                            <span>SHARE:</span>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </article>
+            </main>
+            
+            <footer>
+                <div class="footer-content">
+                    <div class="footer-info">
+                        <p>© 2023 CYBERPUNK_HUB | All rights reserved</p>
+                        <p>Secured with quantum encryption</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <script src="../static/js/main.js"></script>
+    <script src="../static/js/cyberpunk-effects.js"></script>
+</body>
+</html>

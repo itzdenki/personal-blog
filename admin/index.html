@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Interface - Cyberpunk Personal Hub</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/cyberpunk-effects.css">
+    <link rel="stylesheet" href="../static/css/hacker-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="overlay"></div>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="terminal-button"></span>
+                <span class="terminal-button"></span>
+                <span class="terminal-button"></span>
+            </div>
+            <div class="terminal-title">ADMIN_CONSOLE_v2.1</div>
+        </div>
+        <div class="terminal-content">
+            <header class="glitch-header">
+                <h1 class="glitch" data-text="CYBERPUNK_HUB">CYBERPUNK_HUB</h1>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="../index.html" class="nav-link">> HOME</a></li>
+                        <li><a href="#" class="nav-link active">> ADMIN</a></li>
+                    </ul>
+                </nav>
+            </header>
+            
+            <main>
+                <section class="admin-panel">
+                    <h2 class="section-title cyber-glitch" data-text="ADMIN_CONSOLE">ADMIN_CONSOLE</h2>
+                    
+                    <div class="admin-login" id="admin-login">
+                        <div class="terminal-window cyber-window">
+                            <div class="cyber-window-header">
+                                <div class="cyber-window-title">system@cyberpunk:~</div>
+                                <div class="cyber-window-controls">
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                </div>
+                            </div>
+                            <div class="cyber-window-content">
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt">$</span>
+                                    <span class="terminal-output">sudo access --admin-panel</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">[sudo] password for system:</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt"></span>
+                                    <input type="password" id="admin-password" class="terminal-input" placeholder="Enter password...">
+                                </div>
+                            </div>
+                        </div>
+                        <button id="login-button" class="cyber-button">AUTHENTICATE</button>
+                    </div>
+                    
+                    <div class="admin-dashboard" id="admin-dashboard" style="display: none;">
+                        <div class="admin-stats">
+                            <div class="stat-card">
+                                <div class="stat-title">VISITORS</div>
+                                <div class="stat-value">13,337</div>
+                                <div class="stat-chart">
+                                    <div class="chart-bar" style="height: 80%;"></div>
+                                    <div class="chart-bar" style="height: 60%;"></div>
+                                    <div class="chart-bar" style="height: 90%;"></div>
+                                    <div class="chart-bar" style="height: 75%;"></div>
+                                    <div class="chart-bar" style="height: 85%;"></div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">BLOG POSTS</div>
+                                <div class="stat-value">42</div>
+                                <div class="stat-chart">
+                                    <div class="chart-bar" style="height: 50%;"></div>
+                                    <div class="chart-bar" style="height: 70%;"></div>
+                                    <div class="chart-bar" style="height: 60%;"></div>
+                                    <div class="chart-bar" style="height: 80%;"></div>
+                                    <div class="chart-bar" style="height: 65%;"></div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">CTF WRITEUPS</div>
+                                <div class="stat-value">27</div>
+                                <div class="stat-chart">
+                                    <div class="chart-bar" style="height: 40%;"></div>
+                                    <div class="chart-bar" style="height: 60%;"></div>
+                                    <div class="chart-bar" style="height: 75%;"></div>
+                                    <div class="chart-bar" style="height: 55%;"></div>
+                                    <div class="chart-bar" style="height: 70%;"></div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-title">UPTIME</div>
+                                <div class="stat-value">99.8%</div>
+                                <div class="stat-chart">
+                                    <div class="chart-bar" style="height: 95%;"></div>
+                                    <div class="chart-bar" style="height: 98%;"></div>
+                                    <div class="chart-bar" style="height: 100%;"></div>
+                                    <div class="chart-bar" style="height: 99%;"></div>
+                                    <div class="chart-bar" style="height: 97%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="admin-tabs">
+                            <div class="tab-buttons">
+                                <button class="tab-button active" data-tab="content">CONTENT</button>
+                                <button class="tab-button" data-tab="users">USERS</button>
+                                <button class="tab-button" data-tab="settings">SETTINGS</button>
+                                <button class="tab-button" data-tab="logs">LOGS</button>
+                            </div>
+                            
+                            <div class="tab-content">
+                                <div class="tab-panel active" id="content-panel">
+                                    <div class="panel-header">
+                                        <h3>CONTENT MANAGEMENT</h3>
+                                        <button class="cyber-button small">+ NEW POST</button>
+                                    </div>
+                                    
+                                    <div class="content-filters">
+                                        <div class="filter-group">
+                                            <span class="filter-label">TYPE:</span>
+                                            <div class="filter-options">
+                                                <span class="filter-tag active">ALL</span>
+                                                <span class="filter-tag">BLOG</span>
+                                                <span class="filter-tag">CTF</span>
+                                                <span class="filter-tag">PAGE</span>
+                                            </div>
+                                        </div>
+                                        <div class="filter-group">
+                                            <span class="filter-label">STATUS:</span>
+                                            <div class="filter-options">
+                                                <span class="filter-tag active">ALL</span>
+                                                <span class="filter-tag">PUBLISHED</span>
+                                                <span class="filter-tag">DRAFT</span>
+                                            </div>
+                                        </div>
+                                        <div class="search-box">
+                                            <input type="text" placeholder="Search content..." class="terminal-input">
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="content-table">
+                                        <table class="cyber-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>TITLE</th>
+                                                    <th>TYPE</th>
+                                                    <th>DATE</th>
+                                                    <th>STATUS</th>
+                                                    <th>ACTIONS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>The Future of Quantum Cryptography</td>
+                                                    <td>BLOG</td>
+                                                    <td>2023-12-15</td>
+                                                    <td><span class="status published">PUBLISHED</span></td>
+                                                    <td>
+                                                        <button class="action-button edit"><i class="fas fa-edit"></i></button>
+                                                        <button class="action-button delete"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Breaking the Unbreakable</td>
+                                                    <td>CTF</td>
+                                                    <td>2023-08-11</td>
+                                                    <td><span class="status published">PUBLISHED</span></td>
+                                                    <td>
+                                                        <button class="action-button edit"><i class="fas fa-edit"></i></button>
+                                                        <button class="action-button delete"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Zero-Day Hunting Methodology</td>
+                                                    <td>BLOG</td>
+                                                    <td>2023-10-22</td>
+                                                    <td><span class="status published">PUBLISHED</span></td>
+                                                    <td>
+                                                        <button class="action-button edit"><i class="fas fa-edit"></i></button>
+                                                        <button class="action-button delete"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Binary Nightmares</td>
+                                                    <td>CTF</td>
+                                                    <td>2023-07-19</td>
+                                                    <td><span class="status published">PUBLISHED</span></td>
+                                                    <td>
+                                                        <button class="action-button edit"><i class="fas fa-edit"></i></button>
+                                                        <button class="action-button delete"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Advanced Firmware Analysis Techniques</td>
+                                                    <td>BLOG</td>
+                                                    <td>2023-11-05</td>
+                                                    <td><span class="status draft">DRAFT</span></td>
+                                                    <td>
+                                                        <button class="action-button edit"><i class="fas fa-edit"></i></button>
+                                                        <button class="action-button delete"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <div class="pagination">
+                                        <a href="#" class="cyber-button active">1</a>
+                                        <a href="#" class="cyber-button">2</a>
+                                        <a href="#" class="cyber-button">3</a>
+                                        <a href="#" class="cyber-button">NEXT</a>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-panel" id="users-panel">
+                                    <div class="panel-header">
+                                        <h3>USER MANAGEMENT</h3>
+                                        <button class="cyber-button small">+ NEW USER</button>
+                                    </div>
+                                    
+                                    <div class="content-table">
+                                        <table class="cyber-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>USERNAME</th>
+                                                    <th>EMAIL</th>
+                                                    <th>ROLE</th>
+                                                    <th>LAST LOGIN</th>
+                                                    <th>ACTIONS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>admin</td>
+                                                    <td>admin@cyberpunk-hub.com</td>
+                                                    <td>ADMIN</td>
+                                                    <td>2023-12-20 14:32:15</td>
+                                                    <td>
+                                                        <button class="action-button edit"><i class="fas fa-edit"></i></button>
+                                                        <button class="action-button delete"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>editor</td>
+                                                    <td>editor@cyberpunk-hub.com</td>
+                                                    <td>EDITOR</td>
+                                                    <td>2023-12-19 09:15:42</td>
+                                                    <td>
+                                                        <button class="action-button edit"><i class="fas fa-edit"></i></button>
+                                                        <button class="action-button delete"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>contributor</td>
+                                                    <td>contributor@cyberpunk-hub.com</td>
+                                                    <td>CONTRIBUTOR</td>
+                                                    <td>2023-12-18 16:45:33</td>
+                                                    <td>
+                                                        <button class="action-button edit"><i class="fas fa-edit"></i></button>
+                                                        <button class="action-button delete"><i class="fas fa-trash"></i></button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-panel" id="settings-panel">
+                                    <div class="panel-header">
+                                        <h3>SYSTEM SETTINGS</h3>
+                                        <button class="cyber-button small">SAVE CHANGES</button>
+                                    </div>
+                                    
+                                    <div class="settings-form">
+                                        <div class="settings-group">
+                                            <h4>GENERAL SETTINGS</h4>
+                                            <div class="form-row">
+                                                <label for="site-title">SITE TITLE:</label>
+                                                <input type="text" id="site-title" value="CYBERPUNK_HUB" class="terminal-input">
+                                            </div>
+                                            <div class="form-row">
+                                                <label for="site-description">SITE DESCRIPTION:</label>
+                                                <input type="text" id="site-description" value="Personal cyberpunk-themed website for sharing knowledge and experiences" class="terminal-input">
+                                            </div>
+                                            <div class="form-row">
+                                                <label for="site-keywords">SITE KEYWORDS:</label>
+                                                <input type="text" id="site-keywords" value="cyberpunk, hacking, CTF, security, blog" class="terminal-input">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="settings-group">
+                                            <h4>APPEARANCE</h4>
+                                            <div class="form-row">
+                                                <label for="primary-color">PRIMARY COLOR:</label>
+                                                <input type="color" id="primary-color" value="#00ff41" class="color-input">
+                                            </div>
+                                            <div class="form-row">
+                                                <label for="secondary-color">SECONDARY COLOR:</label>
+                                                <input type="color" id="secondary-color" value="#ff00ff" class="color-input">
+                                            </div>
+                                            <div class="form-row">
+                                                <label for="glitch-intensity">GLITCH INTENSITY:</label>
+                                                <input type="range" id="glitch-intensity" min="0" max="10" value="7" class="range-input">
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="settings-group">
+                                            <h4>CONTENT SETTINGS</h4>
+                                            <div class="form-row">
+                                                <label for="posts-per-page">POSTS PER PAGE:</label>
+                                                <input type="number" id="posts-per-page" value="6" class="terminal-input">
+                                            </div>
+                                            <div class="form-row">
+                                                <label for="comments-enabled">COMMENTS ENABLED:</label>
+                                                <div class="toggle-switch">
+                                                    <input type="checkbox" id="comments-enabled" checked>
+                                                    <label for="comments-enabled"></label>
+                                                </div>
+                                            </div>
+                                            <div class="form-row">
+                                                <label for="analytics-enabled">ANALYTICS ENABLED:</label>
+                                                <div class="toggle-switch">
+                                                    <input type="checkbox" id="analytics-enabled" checked>
+                                                    <label for="analytics-enabled"></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-panel" id="logs-panel">
+                                    <div class="panel-header">
+                                        <h3>SYSTEM LOGS</h3>
+                                        <button class="cyber-button small">CLEAR LOGS</button>
+                                    </div>
+                                    
+                                    <div class="logs-container">
+                                        <div class="terminal-window cyber-window">
+                                            <div class="cyber-window-header">
+                                                <div class="cyber-window-title">system@cyberpunk:~/logs</div>
+                                                <div class="cyber-window-controls">
+                                                    <span class="cyber-window-button"></span>
+                                                    <span class="cyber-window-button"></span>
+                                                    <span class="cyber-window-button"></span>
+                                                </div>
+                                            </div>
+                                            <div class="cyber-window-content">
+                                                <div class="terminal-line">
+                                                    <span class="terminal-prompt">$</span>
+                                                    <span class="terminal-output">tail -f system.log</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 14:32:15] [INFO] User 'admin' logged in successfully</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 14:35:22] [INFO] New blog post created: 'The Future of Quantum Cryptography'</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 14:40:18] [WARNING] Failed login attempt for user 'unknown'</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 14:45:33] [INFO] System settings updated</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 14:50:12] [ERROR] Database connection timeout</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 14:50:15] [INFO] Database connection restored</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 14:55:27] [INFO] User 'editor' logged in successfully</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 15:00:42] [INFO] CTF writeup updated: 'Breaking the Unbreakable'</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 15:05:18] [WARNING] High CPU usage detected (85%)</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 15:10:33] [INFO] CPU usage normalized (45%)</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 15:15:22] [INFO] Backup process started</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 15:20:45] [INFO] Backup completed successfully</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 15:25:11] [INFO] User 'contributor' logged in successfully</span>
+                                                </div>
+                                                <div class="terminal-line">
+                                                    <span class="terminal-output">[2023-12-20 15:30:27] [INFO] New draft created: 'Advanced Firmware Analysis Techniques'</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+            
+            <footer>
+                <div class="footer-content">
+                    <div class="footer-info">
+                        <p>© 2023 CYBERPUNK_HUB | All rights reserved</p>
+                        <p>Secured with quantum encryption</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <script src="../static/js/main.js"></script>
+    <script src="../static/js/cyberpunk-effects.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Admin login functionality
+            const loginButton = document.getElementById('login-button');
+            const adminLogin = document.getElementById('admin-login');
+            const adminDashboard = document.getElementById('admin-dashboard');
+            const adminPassword = document.getElementById('admin-password');
+            
+            loginButton.addEventListener('click', function() {
+                // In a real application, this would validate against a server
+                // For demo purposes, any password works
+                adminLogin.style.display = 'none';
+                adminDashboard.style.display = 'block';
+            });
+            
+            adminPassword.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    loginButton.click();
+                }
+            });
+            
+            // Tab functionality
+            const tabButtons = document.querySelectorAll('.tab-button');
+            const tabPanels = document.querySelectorAll('.tab-panel');
+            
+            tabButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons and panels
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    tabPanels.forEach(panel => panel.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    // Show corresponding panel
+                    const tabId = this.getAttribute('data-tab');
+                    document.getElementById(tabId + '-panel').classList.add('active');
+                });
+            });
+            
+            // Content filter functionality
+            const filterTags = document.querySelectorAll('.filter-tag');
+            
+            filterTags.forEach(tag => {
+                tag.addEventListener('click', function() {
+                    // Find all tags in the same group
+                    const groupTags = this.parentElement.querySelectorAll('.filter-tag');
+                    
+                    // Remove active class from all tags in the group
+                    groupTags.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tag
+                    this.classList.add('active');
+                    
+                    // In a real application, this would filter the content
+                    // For demo purposes, we're just updating the UI
+                });
+            });
+        });
+    </script>
+</body>
+</html>

